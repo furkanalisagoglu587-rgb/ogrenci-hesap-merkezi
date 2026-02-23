@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Öğrenci Hesap Merkezi</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#111;
+color:white;
+text-align:center;
+transition:0.3s;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:#1f1f1f;
+}
+
+.menu-btn{
+font-size:24px;
+cursor:pointer;
+}
+
+.menu{
+display:none;
+position:absolute;
+top:60px;
+left:10px;
+background:#222;
+padding:10px;
+border-radius:10px;
+text-align:left;
+}
+
+.menu button{
+display:block;
+width:200px;
+margin:5px 0;
+padding:8px;
+background:#333;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:6px;
+}
+
+.section{
+display:none;
+padding:20px;
+}
+
+.active{
+display:block;
+}
+
+input, button{
+padding:8px;
+margin:5px;
+border-radius:6px;
+border:none;
+}
+
+button{
+background:#4CAF50;
+color:white;
+cursor:pointer;
+}
+
+.dark-toggle{
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+<h3>Öğrenci Hesap Merkezi</h3>
+<div class="dark-toggle" onclick="toggleDark()">🌙</div>
+</header>
+
+<div class="menu" id="menu">
+<button onclick="showSection('countdown')">Okul Geri Sayım</button>
+<button onclick="showSection('age')">Yaş Hesaplama</button>
+<button onclick="showSection('average')">Not Ortalaması</button>
+<button onclick="showSection('final')">Finalden Kaç Almalıyım</button>
+<button onclick="showSection('pomodoro')">Pomodoro</button>
+<button onclick="showSection('lgs')">LGS Programı</button>
+<button onclick="showSection('yks')">YKS Programı</button>
+</div>
+
+<!-- OKUL GERİ SAYIM -->
+<div id="countdown" class="section active">
+<h2>🎓 Okulun Bitmesine</h2>
+<h1 id="count"></h1>
+</div>
+
+<!-- YAŞ -->
+<div id="age" class="section">
+<h2>🎂 Yaş Hesaplama</h2>
+<input type="date" id="birth">
+<button onclick="calculateAge()">Hesapla</button>
+<h3 id="ageResult"></h3>
+</div>
+
+<!-- ORTALAMA -->
+<div id="average" class="section">
+<h2>📊 Not Ortalaması</h2>
+<input type="number" id="n1" placeholder="Not 1">
+<input type="number" id="n2" placeholder="Not 2">
+<input type="number" id="n3" placeholder="Not 3">
+<br>
+<button onclick="calculateAverage()">Hesapla</button>
+<h3 id="avgResult"></h3>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="section">
+<h2>📈 Finalden Kaç Almalıyım</h2>
+<input type="number" id="vize" placeholder="Vize Notu">
+<input type="number" id="hedef" placeholder="Hedef Ortalama">
+<br>
+<button onclick="calculateFinal()">Hesapla</button>
+<h3 id="finalResult"></h3>
+</div>
+
+<!-- POMODORO -->
+<div id="pomodoro" class="section">
+<h2>⏳ Pomodoro</h2>
+<h1 id="timer">25:00</h1>
+<button onclick="startPomodoro()">Başlat</button>
+</div>
+
+<!-- LGS -->
+<div id="lgs" class="section">
+<h2>📚 LGS Çalışma Programı</h2>
+<p>Günlük 3 saat:</p>
+<p>Türkçe 40 dk</p>
+<p>Matematik 50 dk</p>
+<p>Fen 40 dk</p>
+<p>İnkılap + Din + İngilizce 50 dk</p>
+</div>
+
+<!-- YKS -->
+<div id="yks" class="section">
+<h2>🎓 YKS Çalışma Programı</h2>
+<p>Günlük 5 saat:</p>
+<p>TYT Matematik 90 dk</p>
+<p>TYT Türkçe 60 dk</p>
+<p>Alan dersi 120 dk</p>
+<p>Deneme + Analiz 60 dk</p>
+</div>
+
+<script>
+function toggleMenu(){
+let menu=document.getElementById("menu");
+menu.style.display=menu.style.display==="block"?"none":"block";
+}
+
+function showSection(id){
+document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+document.getElementById("menu").style.display="none";
+}
+
+function toggleDark(){
+document.body.style.background=
+document.body.style.background==="white"?"#111":"white";
+document.body.style.color=
+document.body.style.color==="black"?"white":"black";
+}
+
+/* OKUL GERİ SAYIM */
+let schoolEnd=new Date("June 14, 2026 00:00:00").getTime();
+setInterval(function(){
+let now=new Date().getTime();
+let diff=schoolEnd-now;
+
+let d=Math.floor(diff/(1000*60*60*24));
+let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+let m=Math.floor((diff%(1000*60*60))/(1000*60));
+let s=Math.floor((diff%(1000*60))/1000);
+
+document.getElementById("count").innerHTML=
+d+" Gün "+h+" Saat "+m+" Dakika "+s+" Saniye";
+},1000);
+
+/* YAŞ */
+function calculateAge(){
+let birth=new Date(document.getElementById("birth").value);
+let today=new Date();
+let age=today.getFullYear()-birth.getFullYear();
+document.getElementById("ageResult").innerText="Yaş: "+age;
+}
+
+/* ORTALAMA */
+function calculateAverage(){
+let n1=Number(document.getElementById("n1").value);
+let n2=Number(document.getElementById("n2").value);
+let n3=Number(document.getElementById("n3").value);
+let avg=(n1+n2+n3)/3;
+document.getElementById("avgResult").innerText="Ortalama: "+avg.toFixed(2);
+}
+
+/* FINAL */
+function calculateFinal(){
+let vize=Number(document.getElementById("vize").value);
+let hedef=Number(document.getElementById("hedef").value);
+let gerekli=(hedef*2)-vize;
+document.getElementById("finalResult").innerText="Finalden alman gereken: "+gerekli.toFixed(2);
+}
+
+/* POMODORO */
+function startPomodoro(){
+let time=1500;
+let interval=setInterval(function(){
+let min=Math.floor(time/60);
+let sec=time%60;
+document.getElementById("timer").innerText=
+(min<10?"0":"")+min+":"+(sec<10?"0":"")+sec;
+time--;
+if(time<0) clearInterval(interval);
+},1000);
+}
+</script>
+
+</body>
+</html>
