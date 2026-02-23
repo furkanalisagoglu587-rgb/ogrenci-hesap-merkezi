@@ -3,232 +3,268 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Öğrenci Hesap Merkezi</title>
+<title>Furkan Öğrenci Paneli</title>
 
 <style>
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:#111;
+font-family:Arial;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 color:white;
 text-align:center;
-transition:0.3s;
 }
 
-header{
+h1{margin-top:20px}
+
+.container{
 display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px;
-background:#1f1f1f;
-}
-
-.menu-btn{
-font-size:24px;
-cursor:pointer;
-}
-
-.menu{
-display:none;
-position:absolute;
-top:60px;
-left:10px;
-background:#222;
-padding:10px;
-border-radius:10px;
-text-align:left;
-}
-
-.menu button{
-display:block;
-width:200px;
-margin:5px 0;
-padding:8px;
-background:#333;
-color:white;
-border:none;
-cursor:pointer;
-border-radius:6px;
-}
-
-.section{
-display:none;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
 padding:20px;
 }
 
-.active{
-display:block;
-}
-
-input, button{
-padding:8px;
-margin:5px;
-border-radius:6px;
-border:none;
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+padding:20px;
+border-radius:15px;
+width:260px;
 }
 
 button{
-background:#4CAF50;
+margin:8px;
+padding:8px 18px;
+border:none;
+border-radius:8px;
+background:#00c6ff;
 color:white;
 cursor:pointer;
 }
 
-.dark-toggle{
-cursor:pointer;
+input,select{
+padding:6px;
+margin:5px;
+}
+
+.section{display:none;padding:20px}
+.active{display:block}
+
+table{
+margin:auto;
+border-collapse:collapse;
+}
+
+td,th{
+border:1px solid white;
+padding:6px 12px;
+}
+
+canvas{
+background:white;
+margin-top:20px;
+border-radius:10px;
 }
 </style>
 </head>
 <body>
 
-<header>
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-<h3>Öğrenci Hesap Merkezi</h3>
-<div class="dark-toggle" onclick="toggleDark()">🌙</div>
-</header>
+<h1>👋 Hoş Geldin Furkan</h1>
 
-<div class="menu" id="menu">
-<button onclick="showSection('countdown')">Okul Geri Sayım</button>
-<button onclick="showSection('age')">Yaş Hesaplama</button>
-<button onclick="showSection('average')">Not Ortalaması</button>
-<button onclick="showSection('final')">Finalden Kaç Almalıyım</button>
-<button onclick="showSection('pomodoro')">Pomodoro</button>
-<button onclick="showSection('lgs')">LGS Programı</button>
-<button onclick="showSection('yks')">YKS Programı</button>
+<div id="home" class="active">
+
+<div class="container">
+<div class="card"><h3>🎓 Okulların Kapanışı</h3><div id="kapanis"></div></div>
+<div class="card"><h3>📄 Karne Günü</h3><div id="karne"></div></div>
+<div class="card"><h3>📝 LGS</h3><div id="lgs"></div></div>
+<div class="card"><h3>🎯 YKS</h3><div id="yks"></div></div>
 </div>
 
-<!-- OKUL GERİ SAYIM -->
-<div id="countdown" class="section active">
-<h2>🎓 Okulun Bitmesine</h2>
-<h1 id="count"></h1>
-</div>
-
-<!-- YAŞ -->
-<div id="age" class="section">
-<h2>🎂 Yaş Hesaplama</h2>
-<input type="date" id="birth">
-<button onclick="calculateAge()">Hesapla</button>
-<h3 id="ageResult"></h3>
-</div>
-
-<!-- ORTALAMA -->
-<div id="average" class="section">
-<h2>📊 Not Ortalaması</h2>
-<input type="number" id="n1" placeholder="Not 1">
-<input type="number" id="n2" placeholder="Not 2">
-<input type="number" id="n3" placeholder="Not 3">
 <br>
-<button onclick="calculateAverage()">Hesapla</button>
-<h3 id="avgResult"></h3>
-</div>
 
-<!-- FINAL -->
-<div id="final" class="section">
-<h2>📈 Finalden Kaç Almalıyım</h2>
-<input type="number" id="vize" placeholder="Vize Notu">
-<input type="number" id="hedef" placeholder="Hedef Ortalama">
-<br>
-<button onclick="calculateFinal()">Hesapla</button>
-<h3 id="finalResult"></h3>
-</div>
+<button onclick="showSection('lgsPanel')">LGS</button>
+<button onclick="showSection('obpPanel')">OBP</button>
+<button onclick="showSection('ortalamaPanel')">Ortalama</button>
+<button onclick="showSection('dersPanel')">Ders Paneli</button>
+<button onclick="showSection('lisePanel')">Lise Puanları</button>
 
-<!-- POMODORO -->
-<div id="pomodoro" class="section">
-<h2>⏳ Pomodoro</h2>
-<h1 id="timer">25:00</h1>
-<button onclick="startPomodoro()">Başlat</button>
 </div>
 
 <!-- LGS -->
-<div id="lgs" class="section">
-<h2>📚 LGS Çalışma Programı</h2>
-<p>Günlük 3 saat:</p>
-<p>Türkçe 40 dk</p>
-<p>Matematik 50 dk</p>
-<p>Fen 40 dk</p>
-<p>İnkılap + Din + İngilizce 50 dk</p>
+<div id="lgsPanel" class="section">
+<h2>LGS Hesaplama</h2>
+Türkçe <input id="turkce">
+Matematik <input id="mat">
+Fen <input id="fen">
+<button onclick="lgsHesapla()">Hesapla</button>
+<p id="lgsSonuc"></p>
+<button onclick="geri()">Ana Sayfa</button>
 </div>
 
-<!-- YKS -->
-<div id="yks" class="section">
-<h2>🎓 YKS Çalışma Programı</h2>
-<p>Günlük 5 saat:</p>
-<p>TYT Matematik 90 dk</p>
-<p>TYT Türkçe 60 dk</p>
-<p>Alan dersi 120 dk</p>
-<p>Deneme + Analiz 60 dk</p>
+<!-- OBP -->
+<div id="obpPanel" class="section">
+<h2>OBP Hesaplama</h2>
+Diploma Notu <input id="diploma">
+<button onclick="obpHesapla()">Hesapla</button>
+<p id="obpSonuc"></p>
+<button onclick="geri()">Ana Sayfa</button>
+</div>
+
+<!-- Ortalama -->
+<div id="ortalamaPanel" class="section">
+<h2>Ortalama</h2>
+Yazılı1 <input id="y1">
+Yazılı2 <input id="y2">
+Sözlü <input id="sozlu">
+<button onclick="ortalamaHesapla()">Hesapla</button>
+<p id="ortalamaSonuc"></p>
+<button onclick="geri()">Ana Sayfa</button>
+</div>
+
+<!-- Ders Paneli -->
+<div id="dersPanel" class="section">
+<h2>Ders Not Takibi</h2>
+Ders Adı <input id="dersAdi">
+Not <input id="dersNot">
+<button onclick="dersEkle()">Ekle</button>
+
+<table>
+<thead>
+<tr><th>Ders</th><th>Not</th></tr>
+</thead>
+<tbody id="dersTablo"></tbody>
+</table>
+
+<canvas id="grafik" width="400" height="200"></canvas>
+
+<button onclick="geri()">Ana Sayfa</button>
+</div>
+
+<!-- Lise Panel -->
+<div id="lisePanel" class="section">
+<h2>Lise Taban Puanları</h2>
+<input id="arama" placeholder="Lise Ara">
+<select id="sehir">
+<option value="">Şehir Seç</option>
+<option>İstanbul</option>
+<option>Ankara</option>
+<option>İzmir</option>
+</select>
+<button onclick="liseFiltre()">Filtrele</button>
+
+<table>
+<thead>
+<tr><th>Lise</th><th>Şehir</th><th>Puan</th></tr>
+</thead>
+<tbody id="liseTablo"></tbody>
+</table>
+
+<button onclick="geri()">Ana Sayfa</button>
 </div>
 
 <script>
-function toggleMenu(){
-let menu=document.getElementById("menu");
-menu.style.display=menu.style.display==="block"?"none":"block";
+
+// COUNTDOWN
+function countdown(id,date){
+function update(){
+const now=new Date().getTime();
+const dist=new Date(date)-now;
+if(dist<0){document.getElementById(id).innerHTML="Bitti";return;}
+const d=Math.floor(dist/(1000*60*60*24));
+document.getElementById(id).innerHTML=d+" Gün";
+}
+update();
+setInterval(update,1000);
 }
 
+countdown("kapanis","June 20, 2026");
+countdown("karne","June 20, 2026");
+countdown("lgs","June 15, 2026");
+countdown("yks","June 21, 2026");
+
+// NAV
 function showSection(id){
-document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active"));
+document.getElementById("home").classList.remove("active");
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
 document.getElementById(id).classList.add("active");
-document.getElementById("menu").style.display="none";
 }
 
-function toggleDark(){
-document.body.style.background=
-document.body.style.background==="white"?"#111":"white";
-document.body.style.color=
-document.body.style.color==="black"?"white":"black";
+function geri(){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById("home").classList.add("active");
 }
 
-/* OKUL GERİ SAYIM */
-let schoolEnd=new Date("June 14, 2026 00:00:00").getTime();
-setInterval(function(){
-let now=new Date().getTime();
-let diff=schoolEnd-now;
-
-let d=Math.floor(diff/(1000*60*60*24));
-let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-let m=Math.floor((diff%(1000*60*60))/(1000*60));
-let s=Math.floor((diff%(1000*60))/1000);
-
-document.getElementById("count").innerHTML=
-d+" Gün "+h+" Saat "+m+" Dakika "+s+" Saniye";
-},1000);
-
-/* YAŞ */
-function calculateAge(){
-let birth=new Date(document.getElementById("birth").value);
-let today=new Date();
-let age=today.getFullYear()-birth.getFullYear();
-document.getElementById("ageResult").innerText="Yaş: "+age;
+// HESAPLAMALAR
+function lgsHesapla(){
+let t=+turkce.value;
+let m=+mat.value;
+let f=+fen.value;
+lgsSonuc.innerHTML="Puan: "+((t*3)+(m*4)+(f*4));
 }
 
-/* ORTALAMA */
-function calculateAverage(){
-let n1=Number(document.getElementById("n1").value);
-let n2=Number(document.getElementById("n2").value);
-let n3=Number(document.getElementById("n3").value);
-let avg=(n1+n2+n3)/3;
-document.getElementById("avgResult").innerText="Ortalama: "+avg.toFixed(2);
+function obpHesapla(){
+obpSonuc.innerHTML="OBP: "+(diploma.value*5);
 }
 
-/* FINAL */
-function calculateFinal(){
-let vize=Number(document.getElementById("vize").value);
-let hedef=Number(document.getElementById("hedef").value);
-let gerekli=(hedef*2)-vize;
-document.getElementById("finalResult").innerText="Finalden alman gereken: "+gerekli.toFixed(2);
+function ortalamaHesapla(){
+let ort=(+y1.value + +y2.value + +sozlu.value)/3;
+ortalamaSonuc.innerHTML="Ortalama: "+ort.toFixed(2);
 }
 
-/* POMODORO */
-function startPomodoro(){
-let time=1500;
-let interval=setInterval(function(){
-let min=Math.floor(time/60);
-let sec=time%60;
-document.getElementById("timer").innerText=
-(min<10?"0":"")+min+":"+(sec<10?"0":"")+sec;
-time--;
-if(time<0) clearInterval(interval);
-},1000);
+// DERS PANEL
+let dersler=JSON.parse(localStorage.getItem("dersler"))||[];
+
+function dersEkle(){
+let ad=dersAdi.value;
+let not=dersNot.value;
+dersler.push({ad,not});
+localStorage.setItem("dersler",JSON.stringify(dersler));
+listele();
+grafikCiz();
 }
+
+function listele(){
+dersTablo.innerHTML="";
+dersler.forEach(d=>{
+dersTablo.innerHTML+=`<tr><td>${d.ad}</td><td>${d.not}</td></tr>`;
+});
+}
+
+function grafikCiz(){
+let c=document.getElementById("grafik");
+let ctx=c.getContext("2d");
+ctx.clearRect(0,0,400,200);
+
+dersler.forEach((d,i)=>{
+ctx.fillStyle="blue";
+ctx.fillRect(i*60+20,200-d.not*2,40,d.not*2);
+});
+}
+
+listele();
+grafikCiz();
+
+// LİSE VERİ
+let liseler=[
+{name:"Kabataş Lisesi",sehir:"İstanbul",puan:490},
+{name:"Ankara Fen",sehir:"Ankara",puan:485},
+{name:"İzmir Fen",sehir:"İzmir",puan:480}
+];
+
+function liseFiltre(){
+let ara=arama.value.toLowerCase();
+let sec=sehir.value;
+liseTablo.innerHTML="";
+liseler
+.filter(l=>l.name.toLowerCase().includes(ara))
+.filter(l=>sec==""||l.sehir==sec)
+.forEach(l=>{
+liseTablo.innerHTML+=`<tr><td>${l.name}</td><td>${l.sehir}</td><td>${l.puan}</td></tr>`;
+});
+}
+
+liseFiltre();
+
 </script>
 
 </body>
